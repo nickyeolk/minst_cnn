@@ -89,12 +89,15 @@ def minst_model(learning_rate,use_two_conv,use_two_fc,hparam):
     
     for i in range(2001):
         batch=mnist.train.next_batch(100)
+        print(type(batch))
+        hot_labels=tf.one_hot(batch[1],10)
+#        print((hot_labels.eval(session=sess)))
         if i%5==0:
             [train_accuracy,s]=sess.run([accuracy,summ],feed_dict={x:batch[0],\
-                y:batch[1]})#this has to be one hot encoded!!!
+                y:hot_labels.eval(session=sess)})#this has to be one hot encoded!!!
             writer.add_summary(s,i)
         #model backup here
-        sess.run(train_step,feed_dict={x:batch[0],y:batch[1]})
+        sess.run(train_step,feed_dict={x:batch[0],y:hot_labels.eval(session=sess)})
         
     #function for making parameter string for testing hyper param
         
