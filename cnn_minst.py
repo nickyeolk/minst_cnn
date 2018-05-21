@@ -22,6 +22,7 @@ def cnn_model_fn(features,labels,mode):
     input_layer=tf.reshape(features['x'],[-1,28,28,1])
     
     #convolutional layer 1, including namescopes. Examine conv2d vs Conv2d!
+    #Conv2d is a class. conv2d is a function that uses the Conv2d class.
     with tf.name_scope('lik_conv1'):
         conv1=tf.layers.conv2d(
             inputs=input_layer,
