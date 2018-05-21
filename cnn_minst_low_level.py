@@ -19,6 +19,9 @@ def conv_layer(inputt,size_in,size_out,name='conv'):
         b=tf.Variable(tf.constant(0.0,shape=[size_out]),name='B')
         conv=tf.nn.conv2d(inputt,w,strides=[1,1,1,1],padding='SAME')
         act=tf.nn.relu(conv+b)
+        w_trans=tf.transpose(w,[2,3,0,1])
+        w_trans1=tf.reshape(w_trans,[size_in,size_out,5,5,1])
+        tf.summary.image('weights',w_trans1[0,:,:,:],size_out)
         tf.summary.histogram('weights',w)
         tf.summary.histogram('biases',b)
         tf.summary.histogram('activations',act)
@@ -89,9 +92,7 @@ def minst_model(learning_rate,use_two_conv,use_two_fc,hparam):
     
     for i in range(2001):
         batch=mnist.train.next_batch(100)
-        print(type(batch))
         hot_labels=tf.one_hot(batch[1],10)
-#        print((hot_labels.eval(session=sess)))
         if i%5==0:
             [train_accuracy,s]=sess.run([accuracy,summ],feed_dict={x:batch[0],\
                 y:hot_labels.eval(session=sess)})#this has to be one hot encoded!!!
