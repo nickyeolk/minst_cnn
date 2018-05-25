@@ -9,3 +9,11 @@ The CNN example using custom estimators are in cnn_minst.py, and the low level A
 ![Sample convolutional filter outputs](./img/conv1_filter_outputs.JPG)
 ### Histogram of filter bias
 ![Sample convolutional filter bias](./img/conv1_filter_bias.JPG)
+## Progress
+- [x] Implement algorithm
+- [x] Insert Tensorboard hooks
+- [x] Output graph
+= [x] Show accuracy progress
+- [x] Show convolution weights
+- [x] Show convolution outputs
+- [ ] Print misclassified images
