@@ -16,4 +16,5 @@ The CNN example using custom estimators are in cnn_minst.py, and the low level A
 = [x] Show accuracy progress
 - [x] Show convolution weights
 - [x] Show convolution outputs
+- [ ] Show confusion matrix
 - [ ] Print misclassified images
