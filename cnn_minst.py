@@ -23,6 +23,8 @@ def cnn_model_fn(features,labels,mode):
     
     #convolutional layer 1, including namescopes. Examine conv2d vs Conv2d!
     #Conv2d is a class. conv2d is a function that uses the Conv2d class.
+    #to get more info, look up programmers_guide/low_level_intro and layer Function shortcuts
+    #Use the class to dig into layer detail.
     with tf.name_scope('lik_conv1'):
         conv1=tf.layers.conv2d(
             inputs=input_layer,
@@ -83,15 +85,26 @@ def cnn_model_fn(features,labels,mode):
     tf.summary.histogram('lik_denasa_wts',weights)
     tf.summary.histogram('lik_dense_bias',bias)
     tf.summary.image('lik_convimg',convimg2[0,:,:,:],32)
-    #put in summary so it will show up in training
-#    accuracy=tf.metrics.accuracy(labels=labels,predictions=predictions['classes'])
-#    tf.summary.scalar('lik_acc',accuracy[1])
 
     #add evaluation metrics. Moved it here so accuracy will be in training too
     eval_metric_ops={
         'accuracy':tf.metrics.accuracy(
             labels=labels, predictions=predictions['classes'])}
     tf.summary.scalar('lik_acc',eval_metric_ops['accuracy'][1])
+    
+    #print confusion matrix images
+    confused=tf.confusion_matrix(labels=labels,predictions=predictions['classes'],dtype=tf.float16)
+    confused1=tf.reshape(confused,[1,10,10,1])
+    tf.summary.image('confusion_mat',confused1) #cols are predictions, rows are labels
+    
+    #print misclassified images
+    mislabeled=tf.not_equal(tf.cast(predictions['classes'],tf.int32),labels)
+    wrong_input=tf.boolean_mask(predictions['classes'],mislabeled)
+    actual_label=tf.boolean_mask(labels,mislabeled)
+    mislabeled2=tf.Print(mislabeled,[wrong_input,actual_label],'printing mislabeled')
+    mislabeled_images = tf.boolean_mask(input_layer, mislabeled2)
+    tf.summary.image('mislabled',mislabeled_images,4)
+
 
     #configure training op
     if(mode==tf.estimator.ModeKeys.TRAIN):
@@ -125,7 +138,7 @@ def main(unused_argv):
         num_epochs=None,
         shuffle=True)
     mnist_classifier.train(
-        input_fn=train_input_fn,steps=20000,hooks=[logging_hook])
+        input_fn=train_input_fn,steps=200,hooks=[logging_hook])
     eval_input_fn=tf.estimator.inputs.numpy_input_fn(
         x={'x':eval_data},
         y=eval_labels,
