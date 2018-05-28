@@ -9,6 +9,14 @@ The CNN example using custom estimators are in cnn_minst.py, and the low level A
 ![Sample convolutional filter outputs](./img/conv1_filter_outputs.JPG)
 ### Histogram of filter bias
 ![Sample convolutional filter bias](./img/conv1_filter_bias.JPG)
+### Confusion matrix
+The columns are the predicted values, and rows are the labels
+![Confusion matrix](./img/confusion_matrix.JPG)
+### Print mislabeled image
+Very rudimentary printing of mislabeld image in tensorboard along with printing the predicted vs label in the python console.
+This indicates that for the 3 images printed, the model predicted 6, 3, 1, but the label was 4, 5, 3
+![Print mislabeled image](./img/mislabeled_images.JPG)
+![Mislabeled mistake: pred vs actual](./img/mislabeled_result.JPG)
 ## Progress
 - [x] Implement algorithm
 - [x] Insert Tensorboard hooks
@@ -16,5 +24,5 @@ The CNN example using custom estimators are in cnn_minst.py, and the low level A
 = [x] Show accuracy progress
 - [x] Show convolution weights
 - [x] Show convolution outputs
-- [ ] Show confusion matrix
-- [ ] Print misclassified images
+- [x] Show confusion matrix
+- [x] Print misclassified images
